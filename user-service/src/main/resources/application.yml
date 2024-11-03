@@ -5,12 +5,12 @@ server:
 
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true       # Eureka ??? ?????? ??
     fetch-registry: true             # Eureka ????? ????? ????
     service-url:
-      defaultZone: http://admin:1234@127.0.0.1:8761/eureka/  # ??? ?? ?? ??? URL
+      defaultZone: http://127.0.0.1:8761/eureka/  # ??? ?? ?? ??? URL
 
 spring:
   application:
@@ -18,3 +18,18 @@ spring:
   cloud:
     config:
       enabled: false
+
+  # MYSQL DB setting
+  datasource:
+    url: jdbc:mysql://localhost:3306/rushmsa
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 컨테이너 환경에서도 자동 업데이트 사용
+      generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect

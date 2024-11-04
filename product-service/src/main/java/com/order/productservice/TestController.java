@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/product")
 public class TestController {
     @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("hi");
+    public String test() {
+        return "hi";
     }
 
-    @GetMapping()
-    public ResponseEntity<String> tests() {
-        return ResponseEntity.ok("his");
+    @GetMapping("/check")
+    public String tests() {
+        return "check check";
     }
 }

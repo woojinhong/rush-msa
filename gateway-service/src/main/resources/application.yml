@@ -1,21 +1,35 @@
 server:
-  port: 8000
+  port: 8001
 
 eureka:
   client:
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
-
-spring:
   application:
     name: gateway-service
+spring:
   cloud:
     gateway:
       routes:
         - id: product-service
-          uri: http://localhost:8081/  # 상품 직접 경로  (안됨)
-#          uri: lb://PRODUCT-SERVICE  유레카 서버에 등록된 인스턴스 경로 (안됨)
+          uri: lb://PRODUCT-SERVICE  # 상품 직접 경로  (안됨)
           predicates:
-            - Path=/api/product/**
+            - Path=/product/**
+          filters:
+            - CustomFilter
+
+        - id: user-service
+          uri: lb://USER-SERVICE  # 상품 직접 경로  (안됨)
+          predicates:
+            - Path=/user/**
+          filters:
+            - CustomFilter
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: 진짜 너무 어려운 것
+            preLogger: true
+            postLogger: true
+

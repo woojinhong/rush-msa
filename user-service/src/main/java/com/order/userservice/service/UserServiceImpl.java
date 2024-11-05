@@ -11,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserOrderResponseDto getUserByUserId(long userId) {
-        Users user = userRepository.findUsersById(userId).orElseThrow(()->
+        Users user = userRepository.findByUserId(userId).orElseThrow(()->
                 new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
 
 

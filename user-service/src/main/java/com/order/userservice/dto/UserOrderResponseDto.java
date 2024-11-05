@@ -16,7 +16,7 @@ public class UserOrderResponseDto {
 
     private Long userId;
     private String email;
-    private String name;
+    private String userName;
 
     private List<OrderRequestDto> orders;
 
@@ -25,15 +25,15 @@ public class UserOrderResponseDto {
     public UserOrderResponseDto(Long userId, String email, String name, List<OrderRequestDto> orders) {
         this.userId = userId;
         this.email = email;
-        this.name = name;
+        this.userName = name;
         this.orders = orders;
     }
 
     public static UserOrderResponseDto toDto(Users user){
         return UserOrderResponseDto.builder()
-                .userId(user.getId())
+                .userId(user.getUserId())
                 .email(user.getEmail())
-                .name(user.getName())
+                .name(user.getUserName())
                 .orders(new ArrayList<>())
                 .build();
     }

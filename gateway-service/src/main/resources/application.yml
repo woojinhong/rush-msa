@@ -24,6 +24,7 @@ spring:
           uri: lb://USER-SERVICE  # 상품 직접 경로  (안됨)
           predicates:
             - Path=/user/**
+#            - Path=/auth/**
           filters:
             - CustomFilter
       default-filters:

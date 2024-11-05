@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Users extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -24,7 +24,7 @@ public class Users extends TimeStamp {
     private String password;
 
     @Column(nullable = false)
-    private String name;
+    private String userName;
 
     @Column(nullable = false, length = 11)
     private String contact;
@@ -35,10 +35,10 @@ public class Users extends TimeStamp {
     private boolean enabled;  // 계정 활성화 여부
 
     @Builder
-    public Users(String email, String password, String name, String contact, String address) {
+    public Users(String email, String password, String userName, String contact, String address) {
         this.email = email;
         this.password = password;
-        this.name = name;
+        this.userName = userName;
         this.contact = contact;
         this.address = address;
     }
@@ -48,7 +48,7 @@ public class Users extends TimeStamp {
         return Users.builder()
                 .email(dto.getEmail())
                 .password(encodedPassword)
-                .name(dto.getName())
+                .userName(dto.getName())
                 .contact(dto.getContact())
                 .address(dto.getAddress())
                 .build();

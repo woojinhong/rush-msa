@@ -1,7 +1,6 @@
+
 server:
-  port: 0 # using random port for load balancing hehe
-
-
+  port: 0
 
 eureka:
   instance:
@@ -10,37 +9,31 @@ eureka:
     register-with-eureka: true       # Eureka ??? ?????? ??
     fetch-registry: true             # Eureka ????? ????? ????
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka/  # ??? ?? ?? ??? URL
+      defaultZone: http://127.0.0.1:8761/eureka  # ??? ?? ?? ??? URL
 
 spring:
   application:
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
-    name: user-service
+    name: order-service
   cloud:
     config:
-      enabled: true
+      enabled: false
 
   # MYSQL DB setting
   datasource:
-    url: jdbc:mysql://localhost:3306/rushmsa
+    url: jdbc:mysql://localhost:3306/rushorder
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update  # 컨테이너 환경에서도 자동 업데이트 사용
+      ddl-auto: update  # ???? ????? ?? ???? ??
       generate-ddl: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "health,info,refresh,beans,bus-refresh"
+logging:
+  level:
+    com.order.orderservice: DEBUG

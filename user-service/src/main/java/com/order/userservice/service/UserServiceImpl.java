@@ -1,15 +1,17 @@
 package com.order.userservice.service;
 
-import com.order.userservice.dto.OrderRequestDto;
+import com.order.userservice.client.OrderServiceClient;
+import com.order.userservice.dto.OrderClientResponseDto;
 import com.order.userservice.dto.UserOrderResponseDto;
 import com.order.userservice.dto.UserSignUpRequestDto;
 import com.order.userservice.entity.Users;
 import com.order.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OrderServiceClient orderServiceClient;
 
     @Override
     public UserOrderResponseDto getUserByUserId(long userId) {
@@ -24,9 +27,12 @@ public class UserServiceImpl implements UserService {
                 new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
 
 
-        UserOrderResponseDto responseDto = UserOrderResponseDto.toDto(user);
+        List<OrderClientResponseDto> ordersList = orderServiceClient.getOrdersByUserId(userId);
+        UserOrderResponseDto userResponseDto = UserOrderResponseDto.toDto(user);
 
-        return responseDto;
+        userResponseDto.setOrders(ordersList);
+
+        return userResponseDto;
     }
 
     @Transactional

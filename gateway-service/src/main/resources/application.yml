@@ -18,74 +18,69 @@ spring:
   cloud:
     gateway:
       routes:
+        # 주문 서비스
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
-              - Path=/order/**
-              - Path=/order-item/**
-              - Path=/cart/**
-              - Path=/wish-list/**
+              - Path=/order-service/**
           filters:
               - CustomFilter
+              - RewritePath=/order-service/(?<segment>.*), /$\{segment}
 
+        # 상품 서비스
         - id: product-service
           uri: lb://PRODUCT-SERVICE
           predicates:
-            - Path=/product/**
+              - Path=/product-service/**
           filters:
             - CustomFilter
+            - RewritePath=/product-service/(?<segment>.*), /$\{segment}
 
-#        - id: user-service
-#          uri: lb://USER-SERVICE
-#          predicates:
-#            - Path=/user/**
-##            - Path=/auth/**
-
+        # 유저 서비스
         # 로그인
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/login
+            - Path=/user-service/user/login
             - Method=POST
           #            - Path=/auth/**
           filters:
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - CustomFilter
 
+        # 유저 서비스
         # 회원가입
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/signup
+            - Path=/user-service/user/signup
             - Method=POST
-            #            - Path=/auth/**
           filters:
-              #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
             - CustomFilter
 
+        # 유저 서비스
+        # 다른 기능
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/**
+            - Path=/user-service/user/**
             - Method=GET
-                #            - Path=/auth/**
           filters:
-                #            - RemoveRequestHeader=Cookie
-#             - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - CustomFilter
 
+        # 유저 서비스
+        # actuator
         - id: user-service
           uri: lb://USER-SERVICE
-
-            #            - Path=/auth/**
           predicates:
-            - Path=/user/actuator/**
+            - Path=/user-service/actuator/**
             - Method=GET,POST
           filters:
             - CustomFilter
-            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
       default-filters:
         - name: GlobalFilter
           args:
@@ -103,4 +98,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,refresh,beans,bus-refresh"
+        include: "health,info,refresh,beans,busrefresh"

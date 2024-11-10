@@ -14,12 +14,12 @@ eureka:
 
 spring:
   application:
+    name: user-service
   rabbitmq:
     host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
-    name: user-service
   cloud:
     config:
       enabled: true
@@ -43,4 +43,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,refresh,beans,bus-refresh"
+        include: "health,info,refresh,beans,busrefresh"

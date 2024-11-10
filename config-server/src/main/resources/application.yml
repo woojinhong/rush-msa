@@ -6,12 +6,10 @@ spring:
     config:
       server:
         native:
-          search-locations: file://${user.home}/Desktop/config-client/native
+          search-locations: file:///C:/Users/Hans/Desktop/config-client/native
         git:
 #          uri: file:///C:/Users/Hans/Desktop/config-client/rush-msa
           uri: https://github.com/woojinhong/spring-cloud-config.git  # public repo 학습용 설정
-
-
   application:
     name: config-server
   profiles:
@@ -25,4 +23,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "bus-refresh, health"
+        include: "busrefresh, health"

@@ -8,29 +8,99 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
   application:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
     name: gateway-service
 spring:
   cloud:
     gateway:
       routes:
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+              - Path=/order/**
+              - Path=/order-item/**
+              - Path=/cart/**
+              - Path=/wish-list/**
+          filters:
+              - CustomFilter
+
         - id: product-service
-          uri: lb://PRODUCT-SERVICE  # 상품 직접 경로  (안됨)
+          uri: lb://PRODUCT-SERVICE
           predicates:
             - Path=/product/**
           filters:
             - CustomFilter
 
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+#          predicates:
+#            - Path=/user/**
+##            - Path=/auth/**
+
+        # 로그인
         - id: user-service
-          uri: lb://USER-SERVICE  # 상품 직접 경로  (안됨)
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/login
+            - Method=POST
+          #            - Path=/auth/**
+          filters:
+#            - RemoveRequestHeader=Cookie
+#            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - CustomFilter
+
+        # 회원가입
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/signup
+            - Method=POST
+            #            - Path=/auth/**
+          filters:
+              #            - RemoveRequestHeader=Cookie
+#            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - CustomFilter
+
+        - id: user-service
+          uri: lb://USER-SERVICE
           predicates:
             - Path=/user/**
-#            - Path=/auth/**
+            - Method=GET
+                #            - Path=/auth/**
+          filters:
+                #            - RemoveRequestHeader=Cookie
+#             - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - CustomFilter
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+
+            #            - Path=/auth/**
+          predicates:
+            - Path=/user/actuator/**
+            - Method=GET,POST
           filters:
             - CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
       default-filters:
         - name: GlobalFilter
           args:
             baseMessage: 진짜 너무 어려운 것
             preLogger: true
             postLogger: true
+#  jwt:
+#    # HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용
+#    secret: testSecretKey20240316testSecretKey20240316testSecretKey20240316
+#    token:
+#      access-expiration-time: 3600000
+#      refresh-expiration-time: 86400000
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,refresh,beans,bus-refresh"

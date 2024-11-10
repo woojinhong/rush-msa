@@ -18,15 +18,17 @@ public class UserOrderResponseDto {
     private String email;
     private String userName;
 
-    private List<OrderRequestDto> orders;
+    private List<OrderClientResponseDto> orders;
 
+    public void setOrders(List<OrderClientResponseDto> orders) {
+        this.orders = orders;
+    }
 
     @Builder
-    public UserOrderResponseDto(Long userId, String email, String name, List<OrderRequestDto> orders) {
+    public UserOrderResponseDto(Long userId, String email, String name) {
         this.userId = userId;
         this.email = email;
         this.userName = name;
-        this.orders = orders;
     }
 
     public static UserOrderResponseDto toDto(Users user){
@@ -34,7 +36,6 @@ public class UserOrderResponseDto {
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .name(user.getUserName())
-                .orders(new ArrayList<>())
                 .build();
     }
 

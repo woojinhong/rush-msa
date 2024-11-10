@@ -14,9 +14,16 @@ eureka:
 spring:
   application:
     name: order-service
+  profiles:
+    active: native
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     config:
-      enabled: false
+      enabled: true
 
   # MYSQL DB setting
   datasource:
@@ -37,3 +44,11 @@ spring:
 logging:
   level:
     com.order.orderservice: DEBUG
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

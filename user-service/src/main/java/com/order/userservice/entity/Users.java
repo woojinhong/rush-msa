@@ -8,11 +8,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Users extends TimeStamp {
+public class Users extends TimeStamp implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -48,7 +50,7 @@ public class Users extends TimeStamp {
         return Users.builder()
                 .email(dto.getEmail())
                 .password(encodedPassword)
-                .userName(dto.getName())
+                .userName(dto.getUserName())
                 .contact(dto.getContact())
                 .address(dto.getAddress())
                 .build();

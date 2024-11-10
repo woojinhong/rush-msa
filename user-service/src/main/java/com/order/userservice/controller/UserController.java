@@ -26,13 +26,16 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserOrderResponseDto getUser(@PathVariable("userId") long userId) {
+    public UserOrderResponseDto getUserByUserId(@PathVariable("userId") long userId) {
         return userService.getUserByUserId(userId);
     }
 
     @GetMapping("/health-check")
     public String status() {
-        return String.format("user-service Port %s", env.getProperty("local.server.port"));
+        return env.getProperty("local.server.port")
+                + ", token= "+env.getProperty("token.secret")
+                + ", token exp= "+env.getProperty("token.expiration_time")
+                ;
     }
 
 }

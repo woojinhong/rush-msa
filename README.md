@@ -48,29 +48,19 @@ Api Gateway를 통한 라우팅 및 인가 기능 구현
 <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/>
 <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=Notion&logoColor=white"/>
 <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/>
+<img src="https://img.shields.io/badge/JMeter-D22128?style=flat-square&logo=ApacheJMeter&logoColor=white"/>
 
 <p>Server</p>
 <img src="https://img.shields.io/badge/Spring-Boot-6DB33F?style=flat-square&logo=SpringBoot&logoColor=white"/>
 <img src="https://img.shields.io/badge/JPA-6DB33F?style=flat-square"/>
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/>
-
 <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white"/>
 <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white"/>
 <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/>
 <img src="https://img.shields.io/badge/MSA-FF7F50?style=flat-square"/>
-<img src="https://img.shields.io/badge/JMeter-D22128?style=flat-square&logo=ApacheJMeter&logoColor=white"/>
 <img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=RabbitMQ&logoColor=white"/>
 <img src="https://img.shields.io/badge/Spring%20Cloud-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
 
-<p>Client</p>
-<img src="https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=Typescript&logoColor=white"/>
-<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
-<img src="https://img.shields.io/badge/React-Router-CA4245?style=flat-square&logo=ReactRouter&logoColor=white"/>
-<img src="https://img.shields.io/badge/Redux-Toolkit-764ABC?style=flat-square&logo=Redux&logoColor=white"/>
-<img src="https://img.shields.io/badge/Styled-Component-DB7093?style=flat-square&logo=StyledComponent&logoColor=white"/>
-<img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=Vite&logoColor=white"/>
-<img src="https://img.shields.io/badge/Mantine-339AF0?style=flat-square&logo=Mantine&logoColor=white"/>
-</div>
 
 ## 🏗 시스템 아키텍쳐
 

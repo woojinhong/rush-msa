@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface NotificationRepository extends JpaRepository<Notifications, Long> {
+public interface NotificationRepository extends  JpaRepository<Notifications, Long> {
 
 
 

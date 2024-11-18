@@ -1,10 +1,13 @@
 package com.order.productservice.service;
 
+import com.order.productservice.common.aop.DistributedLock;
 import com.order.productservice.dto.ProductSummaryResponseDto;
 import com.order.productservice.entity.Products;
 import com.order.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+
 
 
     // 상품 생성
@@ -38,6 +42,17 @@ public class ProductServiceImpl implements ProductService {
         return products.stream()
                 .map(ProductSummaryResponseDto::toSummaryDto)
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    @DistributedLock(key = "productLock", waitTime = 30L, leaseTime = 10L)
+    public void decrease(Long productId, Long quantity) {
+        Products product = productRepository.findById(productId).orElseThrow(()
+                -> new IllegalArgumentException("product not found"));
+        product.decreaseStock(quantity);
+
+        productRepository.saveAndFlush(product);
     }
 
 //    // 상품 상세 조회

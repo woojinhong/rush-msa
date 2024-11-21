@@ -53,9 +53,9 @@ class ProductServiceImplTest {
     }
 
     @Test
-    @DisplayName("decrease 100 thread stock")
+    @DisplayName("decrease 1000 thread stock")
     void threadDecrease() throws InterruptedException {
-        int threadCount = 100;
+        int threadCount = 1000;
 
         ExecutorService ex = Executors.newFixedThreadPool(32);
 
@@ -63,7 +63,7 @@ class ProductServiceImplTest {
         for (int i = 0; i < threadCount; i++){
             ex.submit(()->{
                 try {
-                    productService.decrease(7L, 1L);
+                    productService.decreaseWithPessimisticLock(1L, 1L);
                 } finally {
                     latch.countDown();
                 }
@@ -71,9 +71,9 @@ class ProductServiceImplTest {
         }
         latch.await();
 
-        Products product = productRepository.findById(7L).orElseThrow(()->
+        Products product = productRepository.findById(1L).orElseThrow(()->
                 new IllegalArgumentException("product not found 에러"));
 
-        assertEquals(0,product.getProductStock());
+        assertEquals(9000,product.getProductStock());
     }
 }

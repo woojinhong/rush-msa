@@ -5,8 +5,8 @@ import com.order.productservice.dto.ProductSummaryResponseDto;
 import com.order.productservice.entity.Products;
 import com.order.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
+    private final RedisTemplate<String, String> redisTemplate; // RedisTemplate 사용
+
+    private static final String STOCK_KEY_PREFIX = "product:stock:";
 
 
     // 상품 생성
@@ -46,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    @DistributedLock(key = "productLock", waitTime = 30L, leaseTime = 10L)
+    @DistributedLock(key = "productLock", waitTime = 15L, leaseTime = 3L)
     public void decrease(Long productId, Long quantity) {
         Products product = productRepository.findById(productId).orElseThrow(()
                 -> new IllegalArgumentException("product not found"));
@@ -55,6 +58,82 @@ public class ProductServiceImpl implements ProductService {
         productRepository.saveAndFlush(product);
     }
 
+    @Transactional
+    @Override
+    public void decreaseWithPessimisticLock(Long productId, Long quantity) {
+        Products product = productRepository.findByPessimisticLockId(productId).orElseThrow(()
+                -> new IllegalArgumentException("product not found"));
+        product.decreaseStock(quantity);
+
+        productRepository.saveAndFlush(product);
+    }
+
+
+
+    @Transactional
+    @Override
+    public void decreaseWithRedis(Long productId, Long quantity) {
+        // Redis 키 생성
+        String redisKey = STOCK_KEY_PREFIX + productId;
+
+        // 1. Redis에서 재고 확인
+        String redisStockString = redisTemplate.opsForValue().get(redisKey);
+        Long remainingStock;
+
+        if (redisStockString == null) {
+            // 2. 캐시 미스: DB에서 재고 조회
+            remainingStock = getStockFromDB(productId);
+
+            // 3. DB 재고 유효성 검증
+            if (remainingStock == null || remainingStock <= 0) {
+                throw new IllegalStateException("Insufficient stock in database");
+            }
+
+            // 4. Redis에 초기화
+            redisTemplate.opsForValue().set(redisKey, remainingStock.toString());
+        } else {
+            // Redis에서 가져온 값을 Long으로 변환
+            try {
+                remainingStock = Long.parseLong(redisStockString);
+            } catch (NumberFormatException e) {
+                throw new IllegalStateException("Invalid stock data in Redis for key: " + redisKey, e);
+            }
+        }
+
+        // 5. Redis에서 원자적으로 재고 감소
+        Long decrementedStock = redisTemplate.opsForValue().decrement(redisKey, quantity);
+
+        // 6. 재고 부족 시 복구 및 예외 처리
+        if (decrementedStock != null && decrementedStock < 0) {
+            redisTemplate.opsForValue().increment(redisKey, quantity); // 복구
+            throw new IllegalStateException("Insufficient stock");
+        }
+    }
+
+    // DB에서 재고 조회
+    public Long getStockFromDB(Long productId) {
+        return productRepository.findStockByProductId(productId)
+                .orElseThrow(() -> new IllegalStateException("Product not found or no stock available"));
+    }
+
+
+    // 주기적으로 Redis 데이터를 DB에 반영하는 메서드 (예시)
+//    @Scheduled(fixedRate = 60000) // 60초마다 실행
+//    public void syncStockToDatabase() {
+//        // 모든 제품의 ID 목록을 가져와서 DB 업데이트 (또는 별도의 Redis Key 스캔)
+//        List<Products> products = productRepository.findAll();
+//        for (Products product : products) {
+//            String redisKey = STOCK_KEY_PREFIX + product.getProductId();
+//            Long stock = redisTemplate.opsForValue().get(redisKey);
+//
+//            // Redis에 저장된 재고를 DB에 반영
+//            if (stock != null) {
+//                product.setStock(stock);
+//                productRepository.save(product);
+//            }
+//        }
+//    }
+}
 //    // 상품 상세 조회
 //    public ProductDetailResponseDto getProduct(Long productId) {
 //        Products products = getProductById(productId);
@@ -68,4 +147,3 @@ public class ProductServiceImpl implements ProductService {
 //    }
 //
 
-}

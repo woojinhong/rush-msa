@@ -1,6 +1,5 @@
 package com.order.productservice.controller;
 
-import com.order.productservice.facade.RedissonLockProductFacade;
 import com.order.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +23,16 @@ public class ProductController {
 
     @GetMapping("/tests")
     public void test(){
-        productService.decrease(2L,1L);
+        productService.decrease(3L,1L);
+    }
+
+    @GetMapping("/tests/pessimistic")
+    public void testPessimistic(){
+        productService.decreaseWithPessimisticLock(1L,1L);
+    }
+
+    @GetMapping("/tests/redis")
+    public void testRedis(){
+        productService.decreaseWithRedis(1L,1L);
     }
 }

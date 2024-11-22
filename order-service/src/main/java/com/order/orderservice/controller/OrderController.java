@@ -1,5 +1,6 @@
 package com.order.orderservice.controller;
 
+import com.order.orderservice.common.config.KafkaProducer;
 import com.order.orderservice.dto.OrderRequestDto;
 import com.order.orderservice.dto.OrderResponseDto;
 import com.order.orderservice.service.OrderService;
@@ -14,11 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final KafkaProducer kafkaProducer;
 
     @PostMapping("/{userId}")
     public ResponseEntity<OrderResponseDto> createOrder(@PathVariable("userId") long userId,
                                                      @RequestBody OrderRequestDto orderRequestDto) {
         OrderResponseDto createOrder = orderService.createOrder(userId, orderRequestDto);
+
+        kafkaProducer.send("example-product-topic",orderRequestDto);
         return ResponseEntity.ok().body(createOrder);
     }
     @GetMapping("/{userId}")

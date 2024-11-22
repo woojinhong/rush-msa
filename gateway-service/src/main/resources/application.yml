@@ -57,7 +57,7 @@ spring:
             - Path=/user-service/user/signup
             - Method=POST
           filters:
-            - RewritePath=/user/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - CustomFilter
 
         # 유저 서비스

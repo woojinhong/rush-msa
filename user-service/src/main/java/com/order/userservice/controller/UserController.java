@@ -20,7 +20,7 @@ public class UserController {
         return ResponseEntity.ok("회원가입 성공");
     }
     @GetMapping("/{userId}")
-    public UserOrderResponseDto getUserByUserId(@PathVariable("userId") long userId) {
+    public UserOrderResponseDto getUserByUserId(@PathVariable Long userId) {
         return userService.getUserByUserId(userId);
     }
     @GetMapping("/health-check")

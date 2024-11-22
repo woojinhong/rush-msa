@@ -22,5 +22,5 @@ public interface ProductRepository extends JpaRepository<Products,Long> {
     @Lock(LockModeType.NONE)
     Optional<Long> findStockByProductId(@Param("productId") Long productId);
 
-    Optional<Products> findById(Long productId);
+    Optional<Products> findByProductId(Long productId);
 }

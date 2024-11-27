@@ -4,6 +4,7 @@ import com.order.productservice.entity.Products;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,4 +24,8 @@ public interface ProductRepository extends JpaRepository<Products,Long> {
     Optional<Long> findStockByProductId(@Param("productId") Long productId);
 
     Optional<Products> findByProductId(Long productId);
+
+    @Modifying
+    @Query("UPDATE Products p SET p.productStock = p.productStock + :quantity WHERE p.productId = :productId")
+    void updateStock(Long productId, Long quantity);
 }

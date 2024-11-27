@@ -51,6 +51,9 @@ public class Products extends TimeStamp implements Serializable {
         }
         this.productStock -= quantity;
     }
+
+    // 상품 수량 감소 메서드 (비즈니스 로직)
+
 }
 
 

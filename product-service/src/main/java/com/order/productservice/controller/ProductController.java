@@ -1,5 +1,6 @@
 package com.order.productservice.controller;
 
+import com.order.productservice.facade.RedissonLockProductFacade;
 import com.order.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final RedissonLockProductFacade redissonLockProductFacade;
 
 
     // 전체 상품 조회
@@ -21,9 +23,19 @@ public class ProductController {
 //        return ResponseEntity.status(HttpStatus.OK).body(products);
 //    }
 
+    @GetMapping("/update")
+    public void updateStock() {
+        productService.restockInRedis(1L,10000L);
+    }
+
     @GetMapping("/tests")
     public void test(){
-        productService.decrease(3L,1L);
+        redissonLockProductFacade.decrease(1L,1L);
+    }
+
+    @GetMapping("/tests/synchronized")
+    public void testSynchronized(){
+        productService.decreaseSynchronized(1L,1L);
     }
 
     @GetMapping("/tests/pessimistic")
@@ -33,6 +45,6 @@ public class ProductController {
 
     @GetMapping("/tests/redis")
     public void testRedis(){
-        productService.decreaseWithRedis(1L,1L);
+        productService.decreaseWithRedis(1L);
     }
 }

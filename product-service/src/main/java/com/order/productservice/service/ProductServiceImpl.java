@@ -1,6 +1,5 @@
 package com.order.productservice.service;
 
-import com.order.productservice.common.aop.DistributedLock;
 import com.order.productservice.dto.ProductSummaryResponseDto;
 import com.order.productservice.entity.Products;
 import com.order.productservice.repository.ProductRepository;
@@ -10,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,36 @@ public class ProductServiceImpl implements ProductService {
 
     private static final String STOCK_KEY_PREFIX = "product:stock:";
 
+
+
+    /**
+     * 재입고 시 Redis에 재고 추가
+     * @param productId 상품 ID
+     * @param quantity 추가할 재고 수량
+     */
+    @Transactional
+    @Override
+    public void restockInRedis(Long productId, Long quantity) {
+        String redisKey = STOCK_KEY_PREFIX + productId;
+
+        // Redis에서 재고 값을 원자적으로 증가
+        redisTemplate.opsForValue().increment(redisKey, quantity);
+
+        System.out.println("재입고 완료: Product ID " + productId + "에 " + quantity + "개 추가됨.");
+    }
+
+    @Transactional
+    public void restock(Long productId, Long quantity) {
+        // 1. DB 재고 업데이트
+        productRepository.updateStock(productId, quantity);
+
+        // 2. Redis 동기화
+        String redisKey = STOCK_KEY_PREFIX + productId;
+        Long updatedStock = productRepository.findStockByProductId(productId)
+                .orElseThrow(() -> new IllegalStateException("Product not found"));
+
+        redisTemplate.opsForValue().set(redisKey, updatedStock.toString());
+    }
 
     // 상품 생성
 //    public void createOrUpdateProduct(ProductRequestDto requestDto) {
@@ -49,20 +81,48 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    @DistributedLock(key = "productLock", waitTime = 15L, leaseTime = 3L)
+//    @DistributedLock(key = "productLock", waitTime = 15L, leaseTime = 3L)
     public void decrease(Long productId, Long quantity) {
-        Products product = productRepository.findById(productId).orElseThrow(()
-                -> new IllegalArgumentException("product not found"));
+        Products product = getProducts(productRepository.findById(productId));
         product.decreaseStock(quantity);
 
         productRepository.saveAndFlush(product);
+    }
+
+    private final Map<Long, Object> locks = new ConcurrentHashMap<>();
+
+    @Override
+    public void decreaseSynchronized(Long productId, Long quantity) {
+        // 고유 락 객체 생성 또는 가져오기
+        Object lock = locks.computeIfAbsent(productId, k -> new Object());
+        System.out.println("Lock for productId " + productId + ": " + System.identityHashCode(lock));
+
+        synchronized (lock) {
+            // 상품 조회
+            Products product = getProducts(productRepository.findById(productId));
+
+            // 재고 감소
+                product.decreaseStock(quantity);
+
+            // RDB 저장
+            productRepository.saveAndFlush(product);
+        }
+
+        // 필요 없는 락 객체 정리 (Optional)
+        locks.remove(productId);
+    }
+
+
+    private Products getProducts(Optional<Products> productRepository) {
+        Products product = productRepository.orElseThrow(()
+                -> new IllegalArgumentException("product not found"));
+        return product;
     }
 
     @Transactional
     @Override
     public void decreaseWithPessimisticLock(Long productId, Long quantity) {
-        Products product = productRepository.findByPessimisticLockId(productId).orElseThrow(()
-                -> new IllegalArgumentException("product not found"));
+        Products product = getProducts(productRepository.findByPessimisticLockId(productId));
         product.decreaseStock(quantity);
 
         productRepository.saveAndFlush(product);
@@ -72,7 +132,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public void decreaseWithRedis(Long productId, Long quantity) {
+    public void decreaseWithRedis(Long productId) {
         // Redis 키 생성
         String redisKey = STOCK_KEY_PREFIX + productId;
 
@@ -101,11 +161,13 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // 5. Redis에서 원자적으로 재고 감소
-        Long decrementedStock = redisTemplate.opsForValue().decrement(redisKey, quantity);
+        //Long decrementedStock = redisTemplate.opsForValue().decrement(redisKey, quantity);
+        // 5. Redis에서 원자적으로 재고 1 감소
+        Long decrementedStock = redisTemplate.opsForValue().decrement(redisKey);
 
         // 6. 재고 부족 시 복구 및 예외 처리
         if (decrementedStock != null && decrementedStock < 0) {
-            redisTemplate.opsForValue().increment(redisKey, quantity); // 복구
+            redisTemplate.opsForValue().increment(redisKey); // 복구
             throw new IllegalStateException("Insufficient stock");
         }
     }

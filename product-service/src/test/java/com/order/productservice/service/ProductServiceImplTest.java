@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
 import java.util.concurrent.CountDownLatch;
@@ -26,6 +27,13 @@ class ProductServiceImplTest {
 
     @Autowired
     private ProductService productService;
+
+//    @Autowired
+//    private final RedisTemplate<String, String> redisTemplate;
+//
+//    ProductServiceImplTest(RedisTemplate<String, String> redisTemplate) {
+//        this.redisTemplate = redisTemplate;
+//    }
 
 //    @Autowired
 //    private PessimisticLockProductServiceImpl pessimisticLockProductService;
@@ -52,9 +60,52 @@ class ProductServiceImplTest {
         assertEquals(99,product.getProductStock());
     }
 
+//    @Test
+//    @DisplayName("redisUpdateStock")
+//    void redisUpdateStock() {
+//
+//        String redisKey = "product:stock:1";
+//
+//
+//        productService.restockInRedis(1L,10000L);
+//
+//        String stockValue = redisTemplate.opsForValue().get(redisKey);
+//
+//
+//
+//        assertEquals("11126", stockValue, "기존 값에 10000L이 제대로 더해지지 않았습니다.");
+//
+//    }
+
     @Test
-    @DisplayName("decrease 1000 thread stock")
-    void threadDecrease() throws InterruptedException {
+    @DisplayName("redisAtomicLock")
+    void redisAtomicDecreaseTest() throws InterruptedException {
+        int threadCount = 1000;
+
+        ExecutorService ex = Executors.newFixedThreadPool(32);
+
+        CountDownLatch latch = new CountDownLatch(threadCount);
+        for (int i = 0; i < threadCount; i++){
+            ex.submit(()->{
+                try {
+                    productService.decreaseWithRedis(1L);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+
+        Products product = productRepository.findById(1L).orElseThrow(()->
+                new IllegalArgumentException("product not found 에러"));
+
+        assertEquals(9000,product.getProductStock());
+    }
+
+
+    @Test
+    @DisplayName("pessimisticLockTest")
+    void pessimisticDecreaseTest() throws InterruptedException {
         int threadCount = 1000;
 
         ExecutorService ex = Executors.newFixedThreadPool(32);
@@ -64,6 +115,32 @@ class ProductServiceImplTest {
             ex.submit(()->{
                 try {
                     productService.decreaseWithPessimisticLock(1L, 1L);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+
+        Products product = productRepository.findById(1L).orElseThrow(()->
+                new IllegalArgumentException("product not found 에러"));
+
+        assertEquals(9000,product.getProductStock());
+    }
+
+
+    @Test
+    @DisplayName("SynchronizedTest")
+    void SynchronizedDecreaseTest() throws InterruptedException {
+        int threadCount = 1000;
+
+        ExecutorService ex = Executors.newFixedThreadPool(32);
+
+        CountDownLatch latch = new CountDownLatch(threadCount);
+        for (int i = 0; i < threadCount; i++){
+            ex.submit(()->{
+                try {
+                    productService.decreaseSynchronized(1L, 1L);
                 } finally {
                     latch.countDown();
                 }

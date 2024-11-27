@@ -38,9 +38,9 @@ class RedissonLockProductFacadeTest {
 //    }
 
     @Test
-    @DisplayName("decrease 100 thread stock")
-    void threadDecrease() throws InterruptedException {
-        int threadCount = 100;
+    @DisplayName("redissonLockTest")
+    void distributedDecreaseTest() throws InterruptedException {
+        int threadCount = 1000;
 
         ExecutorService ex = Executors.newFixedThreadPool(32);
 
@@ -48,7 +48,7 @@ class RedissonLockProductFacadeTest {
         for (int i = 0; i < threadCount; i++){
             ex.submit(()->{
                 try {
-                    productService.decrease(8L, 1L);
+                    productService.decrease(1L, 1L);
                 } finally {
                     latch.countDown();
                 }
@@ -56,8 +56,8 @@ class RedissonLockProductFacadeTest {
         }
         latch.await();
 
-        Products product = productRepository.findById(8L).orElseThrow();
+        Products product = productRepository.findById(1L).orElseThrow();
 
-        assertEquals(0,product.getProductStock());
+        assertEquals(9000,product.getProductStock());
     }
 }

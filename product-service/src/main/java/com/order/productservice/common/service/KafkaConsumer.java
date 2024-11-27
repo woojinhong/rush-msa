@@ -4,11 +4,10 @@ package com.order.productservice.common.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.order.productservice.entity.Products;
 import com.order.productservice.repository.ProductRepository;
+import com.order.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,8 @@ public class KafkaConsumer {
 
 
     private final ProductRepository productRepository;
+
+    private final ProductService productService;
 
     @KafkaListener(topics = "example-product-topic")
     public void updateQty(String kafkaMessage) {
@@ -37,9 +38,15 @@ public class KafkaConsumer {
             ex.printStackTrace();
         }
 
-        Products product = productRepository.findByProductId((long)map.get("productId")).orElseThrow(()->
-                new IllegalArgumentException("product not found Kafka Consumer"));
+        Long productId = ((Number) map.get("productId")).longValue(); // 메시지에서 productId 추출
 
+        try {
+            // Redis를 이용한 재고 감소
+            productService.decreaseWithRedis(productId);
+        } catch (IllegalStateException e) {
+            log.error("Failed to decrease stock for productId {}: {}", productId, e.getMessage());
+        }
+    }
 
     }
-}
+

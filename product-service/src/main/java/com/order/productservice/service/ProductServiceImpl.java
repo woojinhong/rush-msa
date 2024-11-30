@@ -3,7 +3,7 @@ package com.order.productservice.service;
 import com.order.productservice.dto.ProductSummaryResponseDto;
 import com.order.productservice.entity.Products;
 import com.order.productservice.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +15,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> readOnlyRedisTemplate;
 
-    private final RedisTemplate<String, String> redisTemplate; // RedisTemplate 사용
+    // 생성자 작성
+    public ProductServiceImpl(
+            ProductRepository productRepository,
+            @Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate,
+            @Qualifier("readOnlyRedisTemplate") RedisTemplate<String, String> readOnlyRedisTemplate
+    ) {
+        this.productRepository = productRepository;
+        this.redisTemplate = redisTemplate;
+        this.readOnlyRedisTemplate = readOnlyRedisTemplate;
+    }
 
     private static final String STOCK_KEY_PREFIX = "product:stock:";
 
@@ -130,6 +140,7 @@ public class ProductServiceImpl implements ProductService {
 
 
 
+
     @Transactional
     @Override
     public void decreaseWithRedis(Long productId) {
@@ -137,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
         String redisKey = STOCK_KEY_PREFIX + productId;
 
         // 1. Redis에서 재고 확인
-        String redisStockString = redisTemplate.opsForValue().get(redisKey);
+        String redisStockString = readOnlyRedisTemplate.opsForValue().get(redisKey);
         Long remainingStock;
 
         if (redisStockString == null) {
@@ -159,7 +170,6 @@ public class ProductServiceImpl implements ProductService {
                 throw new IllegalStateException("Invalid stock data in Redis for key: " + redisKey, e);
             }
         }
-
         // 5. Redis에서 원자적으로 재고 감소
         //Long decrementedStock = redisTemplate.opsForValue().decrement(redisKey, quantity);
         // 5. Redis에서 원자적으로 재고 1 감소

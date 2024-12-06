@@ -67,42 +67,54 @@ Api Gateway를 통한 라우팅 및 인가 기능 구현
 ## 📑 ERD
 ![image](https://github.com/user-attachments/assets/9b9b29be-a9e9-44da-85b2-34e93151dc2e)
 
-### 1. **Users (사용자)**
+<details>
+<summary>1. **Users (사용자)**</summary>
 
-- **user_id** (PK): 사용자 고유 ID
-- **email**: 사용자 이메일
-- password: 사용자 비밀번호
-- user_name: 사용자 이름
-- **phone_number**: 연락처
-- **created_at**: 계정 생성일
-- 사용자의 기본 정보를 관리, , 로그인 시 사용자 인증에 사용
+- **user_id** (PK): 사용자 고유 ID  
+- **email**: 사용자 이메일  
+- password: 사용자 비밀번호  
+- user_name: 사용자 이름  
+- **phone_number**: 연락처  
+- **created_at**: 계정 생성일  
+- 사용자의 기본 정보를 관리, , 로그인 시 사용자 인증에 사용  
 
-### 2. **LimitedProducts (한정판 상품)**
+</details>
 
-- **product_id** (PK): 상품 고유 ID
-- **product_name**: 상품명 (예: “Jordan Nike 1 Limited Edition”)
-- product_desc: 상품 설명
-- **product_price**: 상품 가격
-- **product_stock**: 재고 수량
-- **created_at**: 상품 생성일
-- 한정판 상품 정보를 관리, 재고 및 판매 기간, 상태 등을 포함. 한정판의 특성 고나리.
+<details>
+<summary>2. **LimitedProducts (한정판 상품)**</summary>
 
-### 3. **Orders (주문)**
+- **product_id** (PK): 상품 고유 ID  
+- **product_name**: 상품명 (예: “Jordan Nike 1 Limited Edition”)  
+- product_desc: 상품 설명  
+- **product_price**: 상품 가격  
+- **product_stock**: 재고 수량  
+- **created_at**: 상품 생성일  
+- 한정판 상품 정보를 관리, 재고 및 판매 기간, 상태 등을 포함. 한정판의 특성 고나리.  
 
-- **order_id** (PK): 주문 고유 ID
-- **user_id** (FK): 사용자 ID (사용자 정보 참조)
-- **product_id** (FK): 상품 ID (한정판 상품 정보 참조)
-- **order_status**: 주문 상태 (예: "pending", "completed", "canceled")
-- **order_date**: 주문 생성 일시
-- 주문 상태를 관리하여 재고 및 재구매 가능 여부를 결정. 주문 취소 시 재고를 증가시키고 재구매를 활성화하며, 완료된 주문에 대해서는 재구매를 불가능하게 설정합니다.
+</details>
 
-### 4. **WishlistNotifications (위시리스트 + 알림)**
+<details>
+<summary>3. **Orders (주문)**</summary>
 
-- **wishlist_id** (PK): 위시리스트 및 알림 고유 ID
-- **user_id** (FK): 사용자 ID (사용자 정보 참조)
-- **product_id** (FK): 상품 ID (한정판 상품 정보 참조)
-- **notification_sent**: 알림 발송 여부 (boolean, default: false)
-- 사용자가 상품을 위시리스트에 추가한 경우 재고 입고 및 판매 시작 전 알림을 받을 수 있습니다. 알림이 한 번 전송되면 `notification_sent`가 true로 설정되어 중복 알림을 방지합니다.
+- **order_id** (PK): 주문 고유 ID  
+- **user_id** (FK): 사용자 ID (사용자 정보 참조)  
+- **product_id** (FK): 상품 ID (한정판 상품 정보 참조)  
+- **order_status**: 주문 상태 (예: "pending", "completed", "canceled")  
+- **order_date**: 주문 생성 일시  
+- 주문 상태를 관리하여 재고 및 재구매 가능 여부를 결정. 주문 취소 시 재고를 증가시키고 재구매를 활성화하며, 완료된 주문에 대해서는 재구매를 불가능하게 설정합니다.  
+
+</details>
+
+<details>
+<summary>4. **WishlistNotifications (위시리스트 + 알림)**</summary>
+
+- **wishlist_id** (PK): 위시리스트 및 알림 고유 ID  
+- **user_id** (FK): 사용자 ID (사용자 정보 참조)  
+- **product_id** (FK): 상품 ID (한정판 상품 정보 참조)  
+- **notification_sent**: 알림 발송 여부 (boolean, default: false)  
+- 사용자가 상품을 위시리스트에 추가한 경우 재고 입고 및 판매 시작 전 알림을 받을 수 있습니다. 알림이 한 번 전송되면 `notification_sent`가 true로 설정되어 중복 알림을 방지합니다.  
+
+</details>
 
 ## 서비스 기대 효과
 **효율적인 구매 경험 제공**

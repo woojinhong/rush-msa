@@ -1,16 +1,19 @@
 # 👧 한정판 스니커즈 선착순 구매 시스템 🧑‍⚕️
-MSA를 활용해 **선착순 구매 시스템**을 구현해, 대량의 트래픽을 처리할 수 있는 환경에 집중 했습니다.
+**한정판 스니커즈 선착순 구매 시스템** 은, 대량의 트래픽 환경에서 안정적이고 신속하게 한정판 스니커즈를 선착순 구매할 수 있도록 구현 되었습니다.
+이 프로젝트는 트래픽 부하를 가정하여 MSA를 
 
-
+선착순 기프트 카드 구매 프로젝트인 Gift Card FCFS Platform은 대규모 트래픽 환경에서 안정적으로 기프트 카드를 구매할 수 있도록 설계되었습니다.
+이 프로젝트는 MSA를 기반으로 한 고성능 시스템을 목표로 하고 있으며, Redis 및 Kafka와 같은 고속 처리 및 메시지 큐를 이용하여 주문과 결제 기능을 구현하였습니다.
 ## 🔎 프로젝트 개요
 
 
 ## 🧑‍💻 프로젝트 인원
-| Back-end Developer  |
-| ------------- |
-| <img src="https://github.com/user-attachments/assets/f881f19f-add6-4b84-a778-8139b05ab3b0" style="width:250px"/> |
+| Back-end Developer|
+| ------ |
+| <img src="https://github.com/user-attachments/assets/f881f19f-add6-4b84-a778-8139b05ab3b0" style="width:200px"/> |
 | 홍우진  |
-| 서버, 기획, Spring Boot, Mysql, REDIS, RabbitMQ, MSA, Spring Cloud |
+| 서버, 기획, Spring Boot, Mysql,
+REDIS, RabbitMQ, MSA, Spring Cloud|
 
 
 ## ⭐ 기능 소개
@@ -48,6 +51,7 @@ Api Gateway를 통한 라우팅 및 인가 기능 구현
 ## 🏗 시스템 아키텍쳐
 ![제목 없음-2024-11-29-1504](https://github.com/user-attachments/assets/5547f204-0065-48a9-b949-49b78c00ec5c)
 
+![제목 없음-2024-11-29-1505](https://github.com/user-attachments/assets/4a58e3dd-3459-4b7d-8e6c-5035a01c7455)
 
 
 ## 🏗 프로세스

@@ -55,7 +55,6 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 
 
 ## 🏗 시스템 아키텍쳐
-![제목 없음-2024-11-29-1504](https://github.com/user-attachments/assets/5547f204-0065-48a9-b949-49b78c00ec5c)
 
 ![제목 없음-2024-11-29-1505](https://github.com/user-attachments/assets/4a58e3dd-3459-4b7d-8e6c-5035a01c7455)
 

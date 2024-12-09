@@ -1,19 +1,31 @@
 # 👧 한정판 스니커즈 선착순 구매 시스템 🧑‍⚕️
-**한정판 스니커즈 선착순 구매 시스템** 은, 대량의 트래픽 환경에서 안정적이고 신속하게 한정판 스니커즈를 선착순 구매할 수 있도록 구현 되었습니다.
-이 프로젝트는 트래픽 부하를 가정하여 MSA를 
+**한정판 스니커즈 선착순 구매 시스템**은 대량 트래픽 환경에서도 안정적이고 신속하게 한정판 스니커즈를 선착순으로 구매할 수 있도록 설계되었습니다.
+이 프로젝트는 트래픽 부하를 고려해 MSA 기반으로 설계되었으며, 핵심 기술로 **Redis**와 **Kafka**를 활용했습니다.
 
-선착순 기프트 카드 구매 프로젝트인 Gift Card FCFS Platform은 대규모 트래픽 환경에서 안정적으로 기프트 카드를 구매할 수 있도록 설계되었습니다.
-이 프로젝트는 MSA를 기반으로 한 고성능 시스템을 목표로 하고 있으며, Redis 및 Kafka와 같은 고속 처리 및 메시지 큐를 이용하여 주문과 결제 기능을 구현하였습니다.
-## 🔎 프로젝트 개요
+- Redis의 싱글 스레드 특성을 기반 동시성 제어 구현
+
+- Kafka 메시지 큐를 활용해 상품과 주문 서비스 사이의 비동기 통신을 설계
+
+- 시스템은 실시간 대량 트래픽에서도 성능 저하 없이 빠르고 안전하게 한정판 구매 기능을 제공하도록 최적화되었습니다.
+
+## 🔎 프로젝트 메인 목표
+
+- 높은 트래픽 환경을 가정하여 Auto Scaling 이 용이한 MSA 환경을 설계 
+
+- 대량 트래픽 환경에서 재고 처리를 동시성 문제 없이 설계
+
+- 
+
+- 
 
 
 ## 🧑‍💻 프로젝트 인원
 | Back-end Developer|
 | ------ |
-| <img src="https://github.com/user-attachments/assets/f881f19f-add6-4b84-a778-8139b05ab3b0" style="width:200px"/> |
+| <img src="https://github.com/user-attachments/assets/f881f19f-add6-4b84-a778-8139b05ab3b0" style="width:250px"/> |
 | 홍우진  |
-| 서버, 기획, Spring Boot, Mysql,
-REDIS, RabbitMQ, MSA, Spring Cloud|
+| 서버, 기획, Spring Boot, MySQL, Kafka
+Redis, RabbitMQ, MSA, Spring Cloud|
 
 
 ## ⭐ 기능 소개
@@ -24,28 +36,25 @@ Spring Cloud Bus와 RabbitMQ를 활용하여 분산 시스템의 원격 설정 �
 
 Api Gateway를 통한 라우팅 및 인가 기능 구현
 
-신뢰성이 높은 Google SMTP를 사용한 이메일 인증 도입
-
 
 
 ## 🛠️ 기술 스텍
 <div align="left"> 
-<p>Common</p>
-<img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/>
-<img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=Notion&logoColor=white"/>
-<img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/>
-<img src="https://img.shields.io/badge/JMeter-D22128?style=flat-square&logo=ApacheJMeter&logoColor=white"/>
-
-<p>Server</p>
-<img src="https://img.shields.io/badge/Spring-Boot-6DB33F?style=flat-square&logo=SpringBoot&logoColor=white"/>
-<img src="https://img.shields.io/badge/JPA-6DB33F?style=flat-square"/>
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/>
-<img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white"/>
-<img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white"/>
-<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/>
-<img src="https://img.shields.io/badge/MSA-FF7F50?style=flat-square"/>
-<img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=RabbitMQ&logoColor=white"/>
-<img src="https://img.shields.io/badge/Spring%20Cloud-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+    <p>Common</p>
+    <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=Notion&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/JMeter-D22128?style=flat-square&logo=ApacheJMeter&logoColor=white"/>
+    <p>Server</p>
+    <img src="https://img.shields.io/badge/Spring_Boot-3.3.5-6DB33F?style=flat-square&logo=SpringBoot&logoColor=white"/>
+    <img src="https://img.shields.io/badge/JPA-6DB33F?style=flat-square"/>
+    <img src="https://img.shields.io/badge/Java-21.0.5-007396?style=flat-square&logo=OpenJDK&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/MySQL-8.0.33-4479A1?style=flat-square&logo=MySQL&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/Redis-3.0.504-DC382D?style=flat-square&logo=Redis&logoColor=white"/> <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/MSA-FF7F50?style=flat-square"/>
+    <img src="https://img.shields.io/badge/Kafka-3.9.0-231F20?style=flat-square&logo=ApacheKafka&logoColor=white"/>
+    <img src="https://img.shields.io/badge/RabbitMQ-3.1.7-FF6600?style=flat-square&logo=RabbitMQ&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/Spring_Cloud-2023.0.3-6DB33F?style=flat-square&logo=Spring&logoColor=white"/> </div>
 
 
 ## 🏗 시스템 아키텍쳐

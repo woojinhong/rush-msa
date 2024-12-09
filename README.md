@@ -132,6 +132,31 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 **투명성과 신뢰성 강화:**
 구매 성공 여부를 실시간으로 투명하게 제공하며, 재고 상태를 신속히 업데이트하여 사용자에게 신뢰할 수 있는 정보를 제공합니다. 이를 통해 구매 프로세스 전반에 걸친 신뢰성을 강화합니다.
 
+## **📝 개선 사항**
+
+- **테스트 툴**: Apache JMeter
+- **테스트 스크립트**: **`1000` 스레드** 동시 요청
+
+![pessimistic_test](https://github.com/user-attachments/assets/87931262-7466-4fe1-911c-3d53a872a4dc)
+![redis_test](https://github.com/user-attachments/assets/d5207117-7f9b-4d3a-bc4c-a82a00da907a)
+
+## 테스트 결과 비교
+
+| Metric                         | 일반 요청 값      | Redis 테스트 값   |
+|---------------------------------|-------------------|-------------------|
+| 요청 수 (# Samples)             | 1,000             | 1,000             |
+| 평균 응답 시간 (ms)             | 2,268 ms          | 72 ms             |
+| 최소 응답 시간 (ms)             | 31 ms             | 5 ms              |
+| 최대 응답 시간 (ms)             | 3,867 ms          | 374 ms            |
+| 표준 편차 (ms)                  | 965.92 ms         | 68.27 ms          |
+| 처리량 (Throughput)             | 205.5/sec         | 759.3/sec         |
+| 에러율 (Error %)                | 0.00%             | 0.00%             |
+| Received KB/sec                 | 24.28 KB/s        | 89.72 KB/s        |
+| Sent KB/sec                     | 28.50 KB/s        | 100.84 KB/s       |
+| 평균 데이터 전송량 (Avg. Bytes) | 121.0 Bytes       | 121.0 Bytes       |
+
+
+- **ThroughPut(TPS):  205.5/sec -> 759.3/sec 약 290% 성능 개선**
 
 
 ## **📝 Issue**

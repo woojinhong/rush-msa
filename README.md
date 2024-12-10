@@ -143,6 +143,10 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 
 ## **📝 개선 사항**
 
+- **테스트 사양**: AMD Ryzen 5 5500U with Radeon Graphics 2.10 GHz   6 코어 12 멀티 스레드
+- AMD64 Family 23 Model 104 Stepping 1 AuthenticAMD ~2100Mhz
+- RAM: 18,294MB 18.2GB
+- 사용 가능 메모리: 5,854MB  5.8GB
 - **테스트 툴**: Apache JMeter
 - **테스트 스크립트**: **`1000` 스레드** 동시 요청
 
@@ -168,6 +172,7 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 - **ThroughPut(TPS):  205.5/sec -> 759.3/sec 약 290% 성능 개선**
 
 
+
 ## **📝 Issue**
 
 ### **1. Redis Cluster 도입, 과연 필요할까?**
@@ -175,7 +180,7 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 
 그러나, "만약 이 시스템을 내가 직접 운영하고 **내 돈으로 비용을 지불**해야 한다면?"이라는 현실적인 관점에서 **비용 효율성과 운영 용이성**을 고려한 최적화 방안을 찾았습니다.
 
-https://www.notion.so/Redis-14d2b5fb2d0880f4a8e0f49832532a0d
+[⚙️Redis Sentinel 아키텍처 도입 이유](https://www.notion.so/Redis-14d2b5fb2d0880f4a8e0f49832532a0d)
 ---
 
 ## **📊 시스템 분석 및 개선 방향**
@@ -227,3 +232,12 @@ if tonumber(stock) > 0 then
 else
     return 0 -- 실패
 end
+
+
+## **⚙️ 미래 개선 사항**
+- 마스터-슬레이브 복제 시스템을 구축하여 멀티 서버 환경을 구축하여 Sentinel 로 Failover 설정 하였지만, 물리적인 하드웨어는 단일 서버이기 때문에 레디스 서버 장애는 failover 처리로 복구가 가능하지만 하드웨어 자체에 장애 발생 시 데이터 유실 발생 가능
+- 운영 환경에서 물리적인 하드웨어를 두대 이상 두어서 데이터 유실 발생 방지를 하여 좀 더 안전한 시스템을 두어야함
+
+- 분산 환경 시스템에 문제점 
+
+ㅇ

@@ -23,39 +23,30 @@
 Redis, RabbitMQ, MSA, Spring Cloud|
 
 
-## ⭐ 기능 소개
+## ⭐ 주요 기능 및 기술
 
-- **discovery-server**: Eureka Server를 구축해 API Gateway의 모니터링 구축
-- **config-server**: Properties 설정 파일 원격 구축
-- **gateway-service**: 모든 서비스 노드들의 라우팅 역할
-- **order-service**: 주문 관련 API 모음
-- **product-service**: 상품 관련 API 모음
-- **user-service**: 유저 로그인, 로그아웃 또는 Authentication 인증 처리 관련 API 모음
+**MSA 아키텍처**
 
+- **Eureka Server:** 서비스 디스커버리 및 로드 밸런싱 지원
+- **API Gateway:** 사용자 인증 처리 및 라우팅 담당
+- **Config Server:** 중앙 집중식 설정 관리 및 RabbitMQ를 통한 설정 변경 자동화
 
-- **GATEWAY** 상품, 주문, 유저간 통신을 담당하는 라우터
+**주요 서비스**
 
-- **Eureka** 각 노드의 LoadBalancing을 위한 서비스
+- **User Service:** 사용자 인증 및 로그인 관리
+- **Product Service:** 상품 정보 조회 및 재고 관리
+- **Order Service:** 선착순 주문 및 결제 처리
 
-- **Kafka**: 상품과 주문 서비스를 비동기 통신으로 대량의 주문 데이터 처리를 위한 메시지 통신 활용
+**동시성 제어 및 성능 최적화**
 
-- **RabbitMQ**: Config Server + Spring Cloud Bus를 활용한 원격 설정 파일의 이벤트를 트리거해 각 연결되어있는 노드들의         
-                  Properties file에 RabbitMQ를 AMPQ 메시지 통신을 활용한 설정 자동화 구현
+- **Redis Sentinel:** 고가용성을 보장하며 Failover를 통한 장애 복구
+- **Lua Script:** 원자적 연산을 통해 재고 감소 및 데이터 일관성 확보
+- **Kafka:** 주문 및 재고 처리를 비동기 이벤트 기반으로 수행하여 DB 부하 분산
 
-- **Redis Sentinel**: 마스터-슬레이브 환경의 읽기 쓰기 전용 서버를 각 설정하고 Sentinel 실시간 모니터링을 활용해 Redis 서버 장애 
-                      발생시 데이터 유실을 최소화 하기위해 자동승격(FailOver)를 활용
+**캐싱 및 트래픽 관리**
 
-
-**Private Git Repository**
-  
-- Redis의 싱글 스레드 특성을 기반 동시성 제어 구현
-
-- Kafka 메시지 큐를 활용해 상품과 주문 서비스 사이의 비동기 통신을 설계
-
-- 실시간 대량 트래픽에서도 성능 저하 없이 빠르고 안전한 한정판 구매 기능 최적화 시스템 구축
-
-- Spring Cloud Bus와 RabbitMQ를 활용하여 분산 시스템의 원격 설정 파일을 자동으로 갱신하고 동기화하는 기능 구현
-
+- Redis의 싱글 스레드 특성을 활용한 빠른 응답 시간 보장
+- Redis Write-Back 방식으로 주기적으로 DB와 동기화
 
 
 

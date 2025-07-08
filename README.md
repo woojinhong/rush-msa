@@ -95,7 +95,7 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 ![image](https://github.com/user-attachments/assets/9b9b29be-a9e9-44da-85b2-34e93151dc2e)
 
 <details>
-<summary>1. **Users (사용자)**</summary>
+<summary>1. Users (사용자)</summary>
 
 - **user_id** (PK): 사용자 고유 ID  
 - **email**: 사용자 이메일  
@@ -108,11 +108,11 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 </details>
 
 <details>
-<summary>2. **LimitedProducts (한정판 상품)**</summary>
+<summary>2. LimitedProducts (한정판 상품)</summary>
 
 - **product_id** (PK): 상품 고유 ID  
 - **product_name**: 상품명 (예: “Jordan Nike 1 Limited Edition”)  
-- product_desc: 상품 설명  
+- **product_desc** 상품 설명  
 - **product_price**: 상품 가격  
 - **product_stock**: 재고 수량  
 - **created_at**: 상품 생성일  
@@ -121,7 +121,7 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 </details>
 
 <details>
-<summary>3. **Orders (주문)**</summary>
+<summary>3. Orders (주문)</summary>
 
 - **order_id** (PK): 주문 고유 ID  
 - **user_id** (FK): 사용자 ID (사용자 정보 참조)  
@@ -133,7 +133,7 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 </details>
 
 <details>
-<summary>4. **WishlistNotifications (위시리스트 + 알림)**</summary>
+<summary>4. WishlistNotifications (위시리스트 + 알림)**</summary>
 
 - **wishlist_id** (PK): 위시리스트 및 알림 고유 ID  
 - **user_id** (FK): 사용자 ID (사용자 정보 참조)  
@@ -251,8 +251,7 @@ end
 
 ## **⚙️ 미래 개선 사항**
 - 마스터-슬레이브 복제 시스템을 구축하여 멀티 서버 환경을 구축하여 Sentinel 로 Failover 설정 하였지만, 물리적인 하드웨어는 단일 서버이기 때문에 레디스 서버 장애는 failover 처리로 복구가 가능하지만 하드웨어 자체에 장애 발생 시 데이터 유실 발생 가능
-- 운영 환경에서 물리적인 하드웨어를 두대 이상 두어서 데이터 유실 발생 방지를 하여 좀 더 안전한 시스템을 두어야함
 
-- 분산 환경 시스템에 문제점 
+- 실제 운영 시 물리적인 하드웨어를 두대 이상 두어서 데이터 유실 발생 방지를 하여 좀 더 안전한 시스템을 구축하기
 
-ㅇ
+

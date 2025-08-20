@@ -133,7 +133,7 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 </details>
 
 <details>
-<summary>4. WishlistNotifications (위시리스트 + 알림)**</summary>
+<summary>4. WishlistNotifications (위시리스트 + 알림)</summary>
 
 - **wishlist_id** (PK): 위시리스트 및 알림 고유 ID  
 - **user_id** (FK): 사용자 ID (사용자 정보 참조)  
@@ -163,7 +163,7 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 - RAM: 18,294MB 18.2GB
 - 사용 가능 메모리: 5,854MB  5.8GB
 - **테스트 툴**: Apache JMeter
-- **테스트 스크립트**: **`1000` 스레드** 동시 요청
+- **테스트 스크립트**: **`10000` 스레드** 동시 요청
 
 ![pessimistic_test](https://github.com/user-attachments/assets/87931262-7466-4fe1-911c-3d53a872a4dc)
 ![redis_test](https://github.com/user-attachments/assets/d5207117-7f9b-4d3a-bc4c-a82a00da907a)
@@ -172,7 +172,7 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 
 | Metric                         | 일반 요청 값      | Redis 테스트 값   |
 |---------------------------------|-------------------|-------------------|
-| 요청 수 (# Samples)             | 1,000             | 1,000             |
+| 요청 수                         | 10,000             | 10,000             |
 | 평균 응답 시간 (ms)             | 2,268 ms          | 72 ms             |
 | 최소 응답 시간 (ms)             | 31 ms             | 5 ms              |
 | 최대 응답 시간 (ms)             | 3,867 ms          | 374 ms            |

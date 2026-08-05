@@ -1,4 +1,4 @@
-# 👧 한정판 스니커즈 선착순 구매 시스템 🧑‍⚕️
+#  한정판 스니커즈 선착순 구매 시스템 
 **한정판 스니커즈 선착순 구매 시스템**은
 
 대량 트래픽 환경에서도 안정적이고 신속하게 한정판 스니커즈를 선착순으로 구매할 수 있도록 설계 하였습니다.
@@ -6,24 +6,14 @@
 이 프로젝트는 트래픽 부하를 고려해 MSA 기반으로 설계되었으며, 핵심 기술로 **Redis**와 **Kafka**를 활용해 구현 하였습니다.
 
 
-## 🔎 프로젝트 메인 목표
+##  프로젝트 메인 목표
 
 - **MSA**를 도입하여 **서비스** 간 **결합도**를 **낮추고**, 높은 트래픽 환경을 가정하여 **Auto Scaling** 이 **용이한** **환경**을 **구축** 
 
 - **분산 환경**에서 선착순 구매의 **신속한 처리**와 **동시성 제어** **문제**를 효과적으로 **해결**
 
 
-
-## 🧑‍💻 프로젝트 인원
-| Back-end Developer|
-| ------ |
-| <img src="https://github.com/user-attachments/assets/f881f19f-add6-4b84-a778-8139b05ab3b0" style="width:250px"/> |
-| 홍우진  |
-| 서버, 기획, Spring Boot, MySQL, Kafka
-Redis, RabbitMQ, MSA, Spring Cloud|
-
-
-## ⭐ 주요 기능 및 기술
+##  주요 기능 및 기술
 
 **MSA 아키텍처**
 
@@ -50,7 +40,7 @@ Redis, RabbitMQ, MSA, Spring Cloud|
 
 
 
-## 🛠️ 기술 스텍
+##  기술 스텍
 <div align="left"> 
     <p>Common</p>
     <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/>
@@ -69,12 +59,12 @@ Redis, RabbitMQ, MSA, Spring Cloud|
     <img src="https://img.shields.io/badge/Spring_Cloud-2023.0.3-6DB33F?style=flat-square&logo=Spring&logoColor=white"/> </div>
 
 
-## 🏗 시스템 아키텍쳐
+##  시스템 아키텍쳐
 
 ![제목 없음-2024-11-29-1505](https://github.com/user-attachments/assets/4a58e3dd-3459-4b7d-8e6c-5035a01c7455)
 
 
-## 🏗 프로세스
+##  프로세스
 
 ![image](https://github.com/user-attachments/assets/3c8b9b99-ed1e-4744-be91-3232d3d5991d)
 
@@ -91,7 +81,7 @@ Redis, RabbitMQ, MSA, Spring Cloud|
     - 주문 상태 Canceled(사용자 주문 취소) → 해당 상품 재 구매 활성화하고 재고 증가 +1
     - 한정판 상품 재고 0 → illegalException (”재고 없음”) → 재 주문 가능 상태
 
-## 📑 ERD
+##  ERD
 ![image](https://github.com/user-attachments/assets/9b9b29be-a9e9-44da-85b2-34e93151dc2e)
 
 <details>
@@ -188,7 +178,7 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 
 
 
-## **📝 Issue**
+## ** Issue**
 
 ### **1. Redis Cluster 도입, 과연 필요할까?**
 한정판 스니커즈 구매 시스템은 **실시간 트래픽 처리**와 **재고 관리**가 핵심입니다. Redis의 **원자적 연산**을 활용해 재고 처리를 수행하는 시스템에서 초기 단계에 Redis Cluster 아키텍처를 도입할지 고민했습니다.
@@ -198,7 +188,7 @@ Redis Sentinel 기반의 고가용성 아키텍처를 활용해 트래픽이 몰
 [⚙️Redis Sentinel 아키텍처 도입 이유](https://www.notion.so/Redis-14d2b5fb2d0880f4a8e0f49832532a0d)
 ---
 
-## **📊 시스템 분석 및 개선 방향**
+## ** 시스템 분석 및 개선 방향**
 
 ### **1. 시스템 요구사항**
 - **재고 규모**:  
